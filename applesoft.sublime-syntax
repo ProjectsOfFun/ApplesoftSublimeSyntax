@@ -1,0 +1,58 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+name: 'Applesoft Basic'
+file_extensions:
+  - a2b
+scope: source.a2b
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin.a2b
+      push: double_quoted_string
+
+    # Comments begin with a '//' and finish at the end of the line
+    - match: 'REM'
+      scope: punctuation.definition.comment.a2b
+      push: line_comment
+
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(FOR|CALL|POKE|PRINT|NEXT|HOME|GOSUB|IF|THEN|RETURN|VTAB|HTAB|SCAN|PEEK|TEXT|DIM|DATA|READ|GR|HGR|HLIN|VLIN|GOTO|LET|INVERSE|NORMAL|FLASH)\b'
+      scope: keyword.control.a2b
+
+    - match: '(=|<|>)'
+      scope: keyword.operator.logical.a2b
+    
+    - match: '\b(OR|AND|TO)\b'
+      scope: keyword.operator.word.a2b
+
+    # Numbers
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.a2b
+
+    # Functions
+    - match: '\b(INT|RND|ATN|COS|EXP|LOG|SGN|SIN|SQR|TAN|LEN|ASC|VAL)\b'
+      scope: entity.name.function.a2b
+
+    # Functions
+    - match: '(LEFT\$|MID\$|RIGHT\$|CHR\$|STR\$)'
+      scope: entity.name.function.a2b
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.a2b
+    - match: '\\.'
+      scope: constant.character.escape.a2b
+    - match: '"'
+      scope: punctuation.definition.string.end.a2b
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.a2b
+    - match: $
+      pop: true
