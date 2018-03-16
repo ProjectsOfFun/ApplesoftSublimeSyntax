@@ -7,8 +7,7 @@ file_extensions:
 scope: source.a2b
 contexts:
   main:
-    # Strings begin and end with quotes, and use backslashes as an escape
-    # character
+    # Strings begin and end with quotes
     - match: '"'
       scope: punctuation.definition.string.begin.a2b
       push: double_quoted_string
@@ -18,31 +17,47 @@ contexts:
       scope: punctuation.definition.comment.a2b
       push: line_comment
 
-    # Keywords are if, else for and while.
-    # Note that blackslashes don't need to be escaped within single quoted
-    # strings in YAML. When using single quoted strings, only single quotes
-    # need to be escaped: this is done by using two single quotes next to each
-    # other.
-    - match: '\b(FOR|CALL|POKE|PRINT|NEXT|HOME|GOSUB|IF|THEN|RETURN|VTAB|HTAB|SCAN|PEEK|TEXT|DIM|DATA|READ|GR|HGR|HLIN|VLIN|GOTO|LET|INVERSE|NORMAL|FLASH)\b'
+    # Bracket Balancing
+    - match: \(
+      push: brackets
+    - match: \)
+      scope: invalid.illegal.stray-bracket-end
+
+    # Keywords
+    - match: '\b(CLEAR|LET|DIM|DEF|GOTO|GOSUB|RETURN|ON|POP|FOR|NEXT|END|STOP|ONERR|RESUME|PRINT|INPUT|GET|HOME|HTAB|VTAB|INVERSE|FLASH|NORMAL|TEXT|GR|COLOR|PLOT|HLIN|VLIN|HGR|HGR2|HPLOT|HCOLOR)\b'
       scope: keyword.control.a2b
+
+    - match: '\b(IF|THEN)\b'
+      scope: keyword.control.conditional.a2b
 
     - match: '(=|<|>)'
       scope: keyword.operator.logical.a2b
+
+    - match: '(\^|\*|\/|\+|\-)'
+      scope: keyword.operator.arithmetic.a2b
     
     - match: '\b(OR|AND|TO)\b'
       scope: keyword.operator.word.a2b
+
+    - match: '\b(CALL|POKE|PEEK|DATA|READ|RESTORE)\b'
+      scope: storage.type.a2b
 
     # Numbers
     - match: '\b(-)?[0-9.]+\b'
       scope: constant.numeric.a2b
 
     # Functions
-    - match: '\b(INT|RND|ATN|COS|EXP|LOG|SGN|SIN|SQR|TAN|LEN|ASC|VAL)\b'
+    - match: '\b(INT|RND|ATN|COS|EXP|LOG|SGN|SIN|SQR|TAN|LEN|ASC|VAL|FRE|PDL|POS|SCRN|FN)\b'
       scope: entity.name.function.a2b
 
     # Functions
     - match: '(LEFT\$|MID\$|RIGHT\$|CHR\$|STR\$)'
       scope: entity.name.function.a2b
+
+  brackets:
+    - match: \)
+      pop: true
+    - include: main
 
   double_quoted_string:
     - meta_scope: string.quoted.double.a2b
