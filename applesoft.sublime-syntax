@@ -2,9 +2,9 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 name: 'Applesoft Basic'
-file_extensions:
-  - a2b
+file_extensions: [a2b, bas]
 scope: source.a2b
+
 contexts:
   main:
     # Strings begin and end with quotes
